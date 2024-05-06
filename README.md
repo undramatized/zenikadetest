@@ -17,6 +17,7 @@ To run the script, navigate to the script directory and use the following comman
 python main.py --src [path_to_excel_file] --log-level [logging_level]
 
 ```
+**Optional Arguments:**
 - `--src`: Specify the path to the source Excel file. Default is "./input_data/Monthly_Sales_Data.xlsx".
 - `--log-level`: Set the logging level to control output verbosity. Options include `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`. Default is `INFO`.
 
