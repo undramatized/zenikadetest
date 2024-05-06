@@ -3,19 +3,22 @@ import logging
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
+from salesdb import SalesBase
+
 
 class MySQLDatabase:
-    def __init__(self, dbname, username='root', password='password', server='localhost', port='3306'):
+    def __init__(self, dbname, username='root', password='password', server='localhost', port='3306', log_level='info'):
         self.engine = None
         drivername = "mysqlconnector"  # Ensure that driver is installed
         self.conn_str = f"mysql+{drivername}://{username}:{password}@{server}:{port}/{dbname}"
-        self.create_engine()
-        logging.basicConfig(level=logging.INFO)  # Basic logging configuration
+        self.create_engine(log_level)
 
-    def create_engine(self):
+    def create_engine(self, log_level):
         """Create the SQLAlchemy engine using the connection string."""
+        logging.info(f"Using Connection String:{self.conn_str}")
+        echo_val = True if log_level == 'debug' else False
         try:
-            self.engine = create_engine(self.conn_str, echo=True)
+            self.engine = create_engine(self.conn_str, echo=echo_val)
             logging.info("Database engine was created successfully.")
         except SQLAlchemyError as e:
             logging.error(f"Error creating engine: {e}")
@@ -41,8 +44,17 @@ class MySQLDatabase:
         except SQLAlchemyError as e:
             logging.error(f"An error occurred: {e}")
 
+    def drop_tables(self, base):
+        try:
+            base.metadata.drop_all(self.engine)
+            logging.info("All tables dropped successfully.")
+        except SQLAlchemyError as e:
+            logging.error(f"An error occurred: {e}")
+
+
 
 if __name__ == '__main__':
     mysql = MySQLDatabase('sales')
-    result = mysql.execute("SELECT host FROM INFORMATION_SCHEMA.PROCESSLIST WHERE ID = CONNECTION_ID()")
-    print(result)
+    # result = mysql.execute("SELECT host FROM INFORMATION_SCHEMA.PROCESSLIST WHERE ID = CONNECTION_ID()")
+    # print(result)
+    mysql.drop_tables(SalesBase)
