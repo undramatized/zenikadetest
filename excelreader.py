@@ -2,6 +2,9 @@ import os
 
 import pandas as pd
 
+from transform import calculate_total_sales
+
+
 class ExcelReader:
     """
     A class to read and consolidate Excel data from multiple sheets.
@@ -46,12 +49,6 @@ class ExcelReader:
     def get_df(self):
         return self.df
 
-def calculate_total_sales(data):
-    # Calculate total sales per product across all months
-    total_sales = data.groupby('Product').agg({'Total Sales': 'sum'}).reset_index()
-    total_sales.columns = ['Product', 'Total Sales']
-    return total_sales
-
 
 if __name__ == '__main__':
     inputpath = "./input_data/Monthly_Sales_Data.xlsx"
@@ -60,3 +57,6 @@ if __name__ == '__main__':
     data = reader.get_df()
     total_sales = calculate_total_sales(data)
     print(total_sales)
+
+    products = data['Product'].unique()
+    print(products)
