@@ -1,12 +1,12 @@
-from sqlalchemy import create_engine, Column, Integer, String, Date, DECIMAL, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, DECIMAL, ForeignKey
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 
-from mysqldb import MySQLDatabase
 
-Base = declarative_base()
+SalesBase = declarative_base()
 
-class Product(Base):
+
+class Product(SalesBase):
     __tablename__ = 'products'
     product_id = Column(Integer, primary_key=True, autoincrement=True)
     product_name = Column(String(255), nullable=False)
@@ -14,7 +14,8 @@ class Product(Base):
     sales_monthly = relationship("SalesMonthly", back_populates="product")
     sales_yearly = relationship("SalesYearly", back_populates="product")
 
-class Sale(Base):
+
+class Sale(SalesBase):
     __tablename__ = 'sales'
     sale_id = Column(Integer, primary_key=True, autoincrement=True)
     product_id = Column(Integer, ForeignKey('products.product_id'))
@@ -24,7 +25,8 @@ class Sale(Base):
     sale_date = Column(Date)
     product = relationship("Product", back_populates="sales")
 
-class SalesMonthly(Base):
+
+class SalesMonthly(SalesBase):
     __tablename__ = 'sales_monthly'
     product_id = Column(Integer, ForeignKey('products.product_id'), primary_key=True)
     month = Column(String(50), primary_key=True)
@@ -34,7 +36,8 @@ class SalesMonthly(Base):
     total_sales = Column(DECIMAL(10, 2))
     product = relationship("Product", back_populates="sales_monthly")
 
-class SalesYearly(Base):
+
+class SalesYearly(SalesBase):
     __tablename__ = 'sales_yearly'
     product_id = Column(Integer, ForeignKey('products.product_id'), primary_key=True)
     year = Column(Integer, primary_key=True)
@@ -43,6 +46,8 @@ class SalesYearly(Base):
 
 
 if __name__ == '__main__':
+    from mysqldb import MySQLDatabase
+
     mysql = MySQLDatabase('sales')
     engine = mysql.get_engine()
-    Base.metadata.create_all(engine)
+    SalesBase.metadata.create_all(engine)
