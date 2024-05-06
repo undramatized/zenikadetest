@@ -3,10 +3,10 @@ import logging
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
-from salesdb import SalesBase
+from mysqldb.salesdb import SalesBase
 
 
-class MySQLDatabase:
+class MySQLConnection:
     def __init__(self, dbname, username='root', password='password', server='localhost', port='3306', log_level='info'):
         self.engine = None
         drivername = "mysqlconnector"  # Ensure that driver is installed
@@ -15,7 +15,7 @@ class MySQLDatabase:
 
     def create_engine(self, log_level):
         """Create the SQLAlchemy engine using the connection string."""
-        logging.info(f"Using Connection String:{self.conn_str}")
+        logging.debug(f"Using Connection String:{self.conn_str}")
         echo_val = True if log_level == 'debug' else False
         try:
             self.engine = create_engine(self.conn_str, echo=echo_val)
@@ -53,7 +53,7 @@ class MySQLDatabase:
 
 
 if __name__ == '__main__':
-    mysql = MySQLDatabase('sales')
+    mysql = MySQLConnection('sales')
     # result = mysql.execute("SELECT host FROM INFORMATION_SCHEMA.PROCESSLIST WHERE ID = CONNECTION_ID()")
     # print(result)
     mysql.drop_tables(SalesBase)

@@ -7,7 +7,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.orm import Session
 
 from ingestion.excelreader import ExcelReader
-from mysqldb import MySQLDatabase
+from mysqldb.mysqlconn import MySQLConnection
 from mysqldb.salesdb import SalesBase, Product, SalesMonthly, SalesYearly
 from ingestion.transform import calculate_total_sales
 
@@ -44,12 +44,12 @@ total_sales = calculate_total_sales(data)
 
 # Initialize database and create tables
 logging.info(f"Creating database engine: {db_name}")
-mysql = MySQLDatabase(db_name,
-                      username=db_user,
-                      password=db_password,
-                      server=db_host,
-                      port=db_port,
-                      log_level=args.log_level.lower())
+mysql = MySQLConnection(db_name,
+                        username=db_user,
+                        password=db_password,
+                        server=db_host,
+                        port=db_port,
+                        log_level=args.log_level.lower())
 engine = mysql.get_engine()
 logging.info(f"Creating tables in {db_name} database")
 SalesBase.metadata.create_all(engine)

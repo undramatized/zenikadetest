@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from transform import calculate_total_sales
+from ingestion.transform import calculate_total_sales
 
 
 class ExcelReader:
