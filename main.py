@@ -6,10 +6,10 @@ from getpass import getpass
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.orm import Session
 
-from excelreader import ExcelReader
+from ingestion.excelreader import ExcelReader
 from mysqldb import MySQLDatabase
-from salesdb import SalesBase, Product, SalesMonthly, SalesYearly
-from transform import calculate_total_sales
+from mysqldb.salesdb import SalesBase, Product, SalesMonthly, SalesYearly
+from ingestion.transform import calculate_total_sales
 
 # Define Constants
 INPUT_PATH = "./input_data/Monthly_Sales_Data.xlsx"

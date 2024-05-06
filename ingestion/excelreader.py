@@ -57,6 +57,3 @@ if __name__ == '__main__':
     data = reader.get_df()
     total_sales = calculate_total_sales(data)
     print(total_sales)
-
-    products = data['Product'].unique()
-    print(products)

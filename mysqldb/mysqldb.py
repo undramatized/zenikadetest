@@ -52,7 +52,6 @@ class MySQLDatabase:
             logging.error(f"An error occurred: {e}")
 
 
-
 if __name__ == '__main__':
     mysql = MySQLDatabase('sales')
     # result = mysql.execute("SELECT host FROM INFORMATION_SCHEMA.PROCESSLIST WHERE ID = CONNECTION_ID()")
